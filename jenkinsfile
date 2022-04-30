@@ -1,0 +1,30 @@
+node{
+
+stage('Pulling code from SCM'){
+git 'https://github.com/Rama-Devopsorg/nodejs-app-mss.git'
+}
+
+stage('build'){
+nodejs(nodeJSInstallationName: 'nodejsv18.0.0'){
+sh "npm install"
+}
+}
+
+stage('Sonarqube server'){
+nodejs(nodeJSInstallationName: 'nodejsv18.0.0'){
+sh "npm run sonar"
+}
+}
+
+stage('nexus repo'){
+sh "npm publish"
+}
+
+stage('Deployment'){
+//sh "npm start &"
+sh "node app.js &"
+}
+
+} // node close
+
+
